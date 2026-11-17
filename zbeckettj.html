@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beckett Jones – Portfolio</title>
+<meta name="description" content="Portfolio of Beckett Jones, math and computer science student at WashU.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --fg: #f3f1ef;
+    --soft: #d4d0cd;
+    --muted: #9b9693;
+    --line: rgba(255, 255, 255, 0.14);
+    --line-strong: rgba(255, 255, 255, 0.28);
+    --accent: #ff3b1f;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 72px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: transparent; color: var(--fg); font-family: var(--mono);
+    font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  /* soft red and purple glows behind everything */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(60% 45% at 12% 18%, rgba(130, 24, 16, 0.42), transparent 70%),
+      radial-gradient(55% 55% at 18% 82%, rgba(88, 26, 100, 0.4), transparent 70%),
+      radial-gradient(40% 40% at 90% 60%, rgba(60, 20, 90, 0.18), transparent 70%),
+      var(--bg);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 40px); }
+
+  /* header */
+  header.top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: max(16px, env(safe-area-inset-top, 0px)) max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-right, 0px)) 16px max(clamp(20px, 3.4vw, 48px), env(safe-area-inset-left, 0px));
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    transition: background 0.25s, border-color 0.25s; border-bottom: 1px solid transparent;
+  }
+  header.top.scrolled {
+    background: rgba(10, 10, 10, 0.72); border-color: var(--line);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  }
+  .brand { font-weight: 700; font-size: clamp(16px, 2vw, 20px); }
+  .nav { display: flex; gap: clamp(14px, 2.4vw, 28px); font-size: 15px; }
+  .nav a { color: var(--soft); transition: color 0.15s; }
+  .nav a:hover { color: var(--accent); }
+
+  /* hero */
+  .hero {
+    position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    padding: 110px 20px 70px;
+  }
+  #cube { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; }
+  .hero-inner { position: relative; z-index: 1; width: 100%; }
+  .hero h1 {
+    font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.02;
+    font-size: clamp(38px, 9.2vw, 132px);
+  }
+  .tagline { margin: clamp(26px, 4vw, 46px) 0 clamp(30px, 4vw, 46px); color: var(--soft); font-size: clamp(15px, 2.1vw, 27px); line-height: 1.6; }
+  .icons { display: flex; justify-content: center; gap: clamp(14px, 4vw, 48px); flex-wrap: wrap; }
+  .ibtn {
+    width: 72px; height: 72px; display: grid; place-items: center; color: var(--soft);
+    border: 1px solid rgba(110, 140, 200, 0.28); background: rgba(10, 10, 10, 0.35);
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .ibtn:hover { border-color: var(--accent); color: #fff; transform: translateY(-3px); }
+  .ibtn svg, .cta svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .cta {
+    margin-top: clamp(30px, 4vw, 46px); display: inline-flex; align-items: center; gap: 18px;
+    border: 1px solid var(--line-strong); background: rgba(10, 10, 10, 0.55);
+    padding: 22px clamp(28px, 5vw, 52px); font-weight: 700; letter-spacing: 0.2em; font-size: 14px; text-transform: uppercase;
+    transition: border-color 0.2s;
+  }
+  .cta:hover { border-color: var(--accent); }
+  .cta svg { width: 18px; height: 18px; }
+
+  /* sections */
+  .sec { padding: clamp(72px, 11vw, 130px) 0; border-top: 1px solid var(--line); }
+  .sec > .wrap > h2 { font-size: clamp(26px, 4vw, 46px); font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: clamp(30px, 5vw, 56px); }
+  .sec > .wrap > h2 span { color: var(--accent); }
+  .label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  .about { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(32px, 6vw, 72px); }
+  .about p { font-size: 17px; color: var(--soft); max-width: 58ch; margin-bottom: 18px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 30px; }
+  .chips span { border: 1px solid var(--line); padding: 4px 10px; font-size: 13px; color: var(--soft); }
+  .edu { border-left: 2px solid var(--accent); padding-left: 16px; margin: 12px 0 30px; color: var(--soft); }
+  .edu b { color: var(--fg); font-weight: 500; }
+
+  .exp { border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 12px 32px; padding: 26px 0; }
+  .exp:last-child { border-bottom: 1px solid var(--line); }
+  .exp h3 { font-size: 18px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; }
+  .exp h3 span { color: var(--muted); font-weight: 400; }
+  .exp ul { list-style: none; padding: 0; margin-top: 10px; }
+  .exp li { color: var(--soft); margin-bottom: 6px; padding-left: 20px; position: relative; max-width: 70ch; }
+  .exp li::before { content: "–"; position: absolute; left: 0; color: var(--accent); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 24px; }
+  .card { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.02); display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; }
+  .card:hover { border-color: rgba(255, 59, 31, 0.6); transform: translateY(-3px); }
+  .card .shot, .card .ph { width: 100%; aspect-ratio: 16 / 9; border-bottom: 1px solid var(--line); display: block; object-fit: cover; }
+  .card .ph {
+    display: flex; align-items: flex-end; padding: 18px; font-size: clamp(20px, 2.4vw, 26px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.15;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 28px),
+      linear-gradient(135deg, rgba(255, 59, 31, 0.2), rgba(100, 40, 170, 0.22)), #0e0e0f;
+  }
+  .card .body { padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card h3 { font-size: 20px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
+  .card p { color: var(--soft); font-size: 14px; }
+  .card .links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 6px; }
+  .btn { border: 1px solid var(--line-strong); padding: 7px 12px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: border-color 0.2s, color 0.2s; }
+  .btn:hover { border-color: var(--accent); color: #fff; }
+
+  .mail { display: inline-block; font-size: clamp(20px, 4.2vw, 46px); letter-spacing: -0.03em; border-bottom: 1px solid var(--line-strong); padding-bottom: 6px; word-break: break-all; transition: color 0.2s, border-color 0.2s; }
+  .mail:hover { color: var(--accent); border-color: var(--accent); }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  footer { padding: 28px 0 calc(36px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+
+  .rv { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .rv.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
+
+  @media (max-width: 760px) {
+    .about { grid-template-columns: 1fr; }
+    .exp { grid-template-columns: 1fr; gap: 6px; }
+    .ibtn { width: 64px; height: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <a class="brand" href="#" id="brand"></a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#about">/about</a>
+    <a href="#projects">/projects</a>
+    <a href="#contact">/contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <canvas id="cube" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <h1 id="name"></h1>
+      <div class="tagline" id="tagline"></div>
+      <div class="icons" id="icons"></div>
+      <a class="cta" href="#about" id="cta">About me! <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a>
+    </div>
+  </section>
+  <div id="sections"></div>
+</main>
+
+<noscript><p style="padding:24px">Beckett Jones – math and computer science at WashU. Email: zbeckettj110@gmail.com</p></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =====================================================================
+   EDIT THIS SECTION. Everything below the next big comment can stay as is.
+   ===================================================================== */
+
+const SITE = {
+  brand: 'Beckett’s Portfolio',
+  name: 'Beckett Jones',
+  tagline: [
+    'math + cs @ washington university in st. louis',
+    'data, ml, and full-stack projects'
+  ],
+  location: 'St. Louis, MO',
+  email: 'zbeckettj110@gmail.com',
+  resume: 'resume.pdf',              // path to your resume file, or a full URL
+  github: 'https://github.com/beckettj',
+  linkedin: 'https://linkedin.com/in/beckett-jones-wustl',
+  about: [
+    'I’m a Math and Computer Science student at Washington University in St. Louis with a minor in Business Analytics, and a member of the varsity track and field team.',
+    'I build data tools and full-stack apps: a CRM dashboard for a healthcare client, machine learning models, and a diagnostic toolkit for AI data agents that I’m developing with Google engineers.',
+    'Away from the keyboard: poker, skydiving, and a weakness for flags and capitals of the world.'
+  ],
+  education: {
+    school: 'Washington University in St. Louis',
+    detail: 'B.S. Math + Computer Science, minor in Business Analytics · May 2029',
+    extra: 'GPA 3.94 · Dean’s List, all eligible semesters'
+  },
+  skills: ['JavaScript', 'Python', 'Java', 'SQL', 'C++', 'R', 'React', 'Node.js', 'Express.js',
+           'Pandas', 'Scikit-learn', 'BigQuery', 'Databricks', 'Tableau', 'Power BI', 'Git/GitHub']
+};
+
+const EXPERIENCE = [
+  {
+    role: 'Teaching Assistant', org: 'WashU McKelvey School of Engineering', dates: 'Aug 2026 – present',
+    points: [
+      'Mentor 493 undergraduates across Intro to CS and Data Structures & Algorithms through office hours and review sessions.',
+      'Review and debug Java code from about 60 students a week, with feedback on object-oriented design, complexity, and efficiency.'
+    ]
+  },
+  {
+    role: 'Data Science Intern', org: 'Riivo.io, Cape Town', dates: 'Jul – Aug 2026',
+    points: [
+      'Redesigned the client-facing CRM dashboard and shipped 12 features, including KPI tracking and year-to-date comparisons.',
+      'Audited 83,631 invoices with SQL, resolving 287 discrepancies.',
+      'Helped rebuild a 138,000-row healthcare appointment database in one day ahead of an emergency client pitch.'
+    ]
+  },
+  {
+    role: 'Data Analytics Intern', org: 'Verified Athletics (remote)', dates: 'Jun 2023 – Aug 2024',
+    points: [
+      'Built a Python scouting algorithm over 1M+ athlete data points, generating reports for 1,740 college football programs.',
+      'Automated data collection and cleaning with Pandas, BeautifulSoup, and Selenium across four large datasets.'
+    ]
+  },
+  {
+    role: 'Published Researcher', org: 'Pioneer Academics Research Program', dates: 'Jun – Aug 2023',
+    points: [
+      'Published a 20-page paper in Curieux Academic Journal on how AI, VR, and AR could transform education, under an Oberlin College professor.'
+    ]
+  }
+];
+
+/* One entry per project. image: path or URL to a screenshot (16:9 works best).
+   Leave it '' for a generated title card. link / repo add buttons. */
+const PROJECTS = [
+  {
+    title: 'AgentForensics Toolkit',
+    year: '2026',
+    description: 'A Python module that parses multi-step agent execution traces and classifies where they fail against Google’s five-stage taxonomy. Built with a Google engineering mentor as one of six developers in the WashU Google Developer Group.',
+    tags: ['Python', 'BigQuery Agent Analytics SDK', 'Open source'],
+    image: ''
+    // repo: 'https://github.com/beckettj/your-repo-name',
+  },
+  {
+    title: 'Riivo CRM Dashboard',
+    year: '2026',
+    description: 'A redesigned client-facing CRM dashboard with KPI tracking and year-to-date performance charts, built during my data science internship.',
+    tags: ['SQL', 'Data visualization', 'CRM'],
+    image: ''
+  },
+  {
+    title: 'Bank Marketing Response Model',
+    year: '2026',
+    description: 'A Random Forest classifier trained on 41,188 customers and 52 features to predict campaign response, reaching an ROC-AUC of 0.86 and 91% accuracy.',
+    tags: ['Python', 'Scikit-learn', 'Databricks'],
+    image: ''
+    // repo: 'https://github.com/beckettj/your-repo-name',
+  },
+  {
+    title: 'Custom-Theme Sudoku',
+    year: '2026',
+    description: 'A full-stack Sudoku game that uses Claude and Pollinations AI to generate custom tiles from any theme. An Express.js backend proxies the AI requests so API keys stay server-side.',
+    tags: ['JavaScript', 'Express.js', 'Railway', 'Claude API'],
+    image: ''
+    // link: 'https://your-app.up.railway.app',
+    // repo: 'https://github.com/beckettj/your-repo-name',
+  }
+];
+
+/* =====================================================================
+   ENGINE. You should not need to change anything below this line.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  const $ = (s) => document.querySelector(s);
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function h(tag, props, ...kids) {
+    const e = document.createElement(tag);
+    for (const k in (props || {})) {
+      const v = props[k];
+      if (k === 'class') e.className = v;
+      else if (k === 'html') e.innerHTML = v;
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else if (v !== false && v != null) e.setAttribute(k, v);
+    }
+    kids.flat().forEach((c) => {
+      if (c == null || c === false) return;
+      e.append(c.nodeType ? c : document.createTextNode(c));
+    });
+    return e;
+  }
+
+  const ICON = {
+    github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+    linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+    mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+    file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>'
+  };
+  const svg = (k) => '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[k] + '</svg>';
+
+  /* ---------- fill the hero ---------- */
+  document.title = SITE.name + ' – Portfolio';
+  $('#brand').textContent = SITE.brand;
+  $('#brand').addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); });
+  $('#name').textContent = SITE.name;
+  SITE.tagline.forEach((t) => $('#tagline').append(h('div', null, t)));
+  [
+    { k: 'github', label: 'GitHub', href: SITE.github, ext: true },
+    { k: 'linkedin', label: 'LinkedIn', href: SITE.linkedin, ext: true },
+    { k: 'mail', label: 'Email', href: 'mailto:' + SITE.email },
+    { k: 'file', label: 'Resume (PDF)', href: SITE.resume, ext: true }
+  ].forEach((i) => {
+    $('#icons').append(h('a', {
+      class: 'ibtn', href: i.href, 'aria-label': i.label, title: i.label,
+      target: i.ext ? '_blank' : false, rel: i.ext ? 'noopener' : false, html: svg(i.k)
+    }));
+  });
+
+  /* ---------- sections ---------- */
+  const heading = (t) => h('h2', null, h('span', null, '/'), t);
+
+  const about = h('section', { class: 'sec', id: 'about' }, h('div', { class: 'wrap' },
+    heading('about'),
+    h('div', { class: 'about rv' },
+      h('div', null, SITE.about.map((t) => h('p', null, t))),
+      h('div', null,
+        h('div', { class: 'label' }, 'Education'),
+        h('div', { class: 'edu' },
+          h('b', null, SITE.education.school), h('br'), SITE.education.detail, h('br'), SITE.education.extra),
+        h('div', { class: 'label' }, 'Skills'),
+        h('div', { class: 'chips' }, SITE.skills.map((s) => h('span', null, s))),
+        h('a', { class: 'btn', href: SITE.resume, target: '_blank', rel: 'noopener' }, 'Open resume')
+      )
+    )
+  ));
+
+  const exp = h('section', { class: 'sec', id: 'experience' }, h('div', { class: 'wrap' },
+    heading('experience'),
+    h('div', { class: 'rv' }, EXPERIENCE.map((x) => h('div', { class: 'exp' },
+      h('div', { class: 'label' }, x.dates),
+      h('div', null,
+        h('h3', null, x.role, ' ', h('span', null, '@ ' + x.org)),
+        h('ul', null, x.points.map((p) => h('li', null, p)))
+      )
+    )))
+  ));
+
+  function projectCard(p) {
+    const ph = () => h('div', { class: 'ph' }, p.title);
+    const visual = p.image
+      ? h('img', { class: 'shot', src: p.image, alt: p.title + ' screenshot', loading: 'lazy', onerror: (e) => e.target.replaceWith(ph()) })
+      : ph();
+    const links = [];
+    if (p.link) links.push(h('a', { class: 'btn', href: p.link, target: '_blank', rel: 'noopener' }, 'View project'));
+    if (p.repo) links.push(h('a', { class: 'btn', href: p.repo, target: '_blank', rel: 'noopener' }, 'Source code'));
+    return h('article', { class: 'card' },
+      visual,
+      h('div', { class: 'body' },
+        h('div', { class: 'label' }, p.year),
+        h('h3', null, p.title),
+        h('p', null, p.description),
+        h('div', { class: 'chips', style: 'margin:4px 0 6px' }, (p.tags || []).map((t) => h('span', null, t))),
+        links.length ? h('div', { class: 'links' }, links) : null
+      )
+    );
+  }
+
+  const projects = h('section', { class: 'sec', id: 'projects' }, h('div', { class: 'wrap' },
+    heading('projects'),
+    h('div', { class: 'grid rv' }, PROJECTS.map(projectCard))
+  ));
+
+  const contact = h('section', { class: 'sec', id: 'contact' }, h('div', { class: 'wrap' },
+    heading('contact'),
+    h('div', { class: 'rv' },
+      h('p', { style: 'color:var(--soft);margin-bottom:22px' }, 'The fastest way to reach me is email.'),
+      h('a', { class: 'mail', href: 'mailto:' + SITE.email }, SITE.email),
+      h('div', { class: 'contact-links' },
+        h('a', { class: 'btn', href: SITE.github, target: '_blank', rel: 'noopener' }, 'GitHub'),
+        h('a', { class: 'btn', href: SITE.linkedin, target: '_blank', rel: 'noopener' }, 'LinkedIn'),
+        h('a', { class: 'btn', href: SITE.resume, target: '_blank', rel: 'noopener' }, 'Resume')
+      )
+    )
+  ));
+
+  const foot = h('footer', null, h('div', { class: 'wrap label' }, SITE.name + '  /  ' + SITE.location));
+  $('#sections').append(about, exp, projects, contact, foot);
+
+  /* ---------- scroll effects ---------- */
+  const header = $('#top');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if ('IntersectionObserver' in window && !RM) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.rv').forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll('.rv').forEach((el) => el.classList.add('in'));
+  }
+
+  /* ---------- background cube (hero only, deliberately dim) ---------- */
+  function initCube() {
+    if (typeof THREE === 'undefined') return;
+    const canvas = $('#cube'), hero = $('#home');
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+    const red = new THREE.PointLight(0xff3a1f, 2.4, 40); red.position.set(-4, -3, 7); scene.add(red);
+    const violet = new THREE.PointLight(0x6a2cff, 1.1, 40); violet.position.set(6, 5, 4); scene.add(violet);
+
+    const holder = new THREE.Group(); scene.add(holder);
+    const cubeRoot = new THREE.Group(); holder.add(cubeRoot);
+
+    const G = 4, SZ = 0.9, GAP = 0.12, STEP = SZ + GAP, OFF = (G - 1) / 2;
+    const box = new THREE.BoxGeometry(SZ, SZ, SZ);
+    const edgeGeo = new THREE.EdgesGeometry(box);
+    const faceMat = new THREE.MeshStandardMaterial({ color: 0x0b0b0c, roughness: 0.32, metalness: 0.75 });
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0xff3a1f, transparent: true, opacity: 0.5 });
+    const cubes = [];
+    for (let x = 0; x < G; x++) for (let y = 0; y < G; y++) for (let z = 0; z < G; z++) {
+      const m = new THREE.Mesh(box, faceMat);
+      m.add(new THREE.LineSegments(edgeGeo, edgeMat));
+      m.position.set((x - OFF) * STEP, (y - OFF) * STEP, (z - OFF) * STEP);
+      cubeRoot.add(m); cubes.push(m);
+    }
+
+    function resize() {
+      const w = hero.clientWidth, hgt = hero.clientHeight;
+      renderer.setSize(w, hgt, false);
+      camera.aspect = w / hgt;
+      camera.position.z = Math.max(11, 9.5 / camera.aspect);
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const ptr = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
+    window.addEventListener('pointermove', (e) => {
+      ptr.x = (e.clientX / window.innerWidth) * 2 - 1;
+      ptr.y = (e.clientY / window.innerHeight) * 2 - 1;
+    }, { passive: true });
+
+    /* occasional slice turns, like a puzzle cube solving itself */
+    let turn = null, nextTurn = 2500;
+    const AXES = ['x', 'y', 'z'];
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    function startTurn() {
+      const axis = AXES[Math.floor(Math.random() * 3)];
+      const layer = Math.floor(Math.random() * G);
+      const pos = (layer - OFF) * STEP;
+      const pivot = new THREE.Group();
+      cubeRoot.add(pivot);
+      cubeRoot.updateMatrixWorld(true);
+      cubes.forEach((c) => { if (Math.abs(c.position[axis] - pos) < 0.01) pivot.attach(c); });
+      turn = { pivot, axis, t: 0, dir: Math.random() < 0.5 ? 1 : -1 };
+    }
+    function finishTurn() {
+      const { pivot, axis, dir } = turn;
+      pivot.rotation[axis] = dir * Math.PI / 2;
+      pivot.updateMatrixWorld(true);
+      while (pivot.children.length) cubeRoot.attach(pivot.children[0]);
+      cubeRoot.remove(pivot);
+      cubes.forEach((c) => {   // snap back onto the grid to stop drift
+        ['x', 'y', 'z'].forEach((k) => { c.position[k] = (Math.round(c.position[k] / STEP + OFF) - OFF) * STEP; });
+      });
+      turn = null;
+    }
+
+    holder.rotation.set(0.5, -0.65, 0);
+    let last = performance.now(), clock = 0, raf = 0, visible = true;
+
+    function render(now) {
+      const dt = Math.min((now - last) / 1000, 0.05); last = now;
+      if (!RM) {
+        clock += dt * 1000;
+        cubeRoot.rotation.y += dt * 0.1;
+        if (turn) {
+          turn.t += dt / 1.0;
+          if (turn.t >= 1) { finishTurn(); nextTurn = clock + 3500 + Math.random() * 2500; }
+          else turn.pivot.rotation[turn.axis] = turn.dir * (Math.PI / 2) * ease(turn.t);
+        } else if (clock > nextTurn) startTurn();
+      }
+      const k = 1 - Math.exp(-3 * dt);
+      cur.x += (ptr.x - cur.x) * k; cur.y += (ptr.y - cur.y) * k;
+      holder.rotation.x = 0.5 + cur.y * 0.1;
+      holder.rotation.y = -0.65 + cur.x * 0.16;
+      renderer.render(scene, camera);
+    }
+    function loop(now) { raf = requestAnimationFrame(loop); render(now); }
+
+    if (RM) { render(performance.now()); window.addEventListener('resize', () => render(performance.now())); return; }
+
+    // only animate while the hero is on screen
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((en) => {
+        visible = en[0].isIntersecting;
+        if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(loop); }
+        else if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
+      }).observe(hero);
+    }
+    raf = requestAnimationFrame(loop);
+  }
+  initCube();
+})();
+</script>
+</body>
+</html>
